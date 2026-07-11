@@ -153,7 +153,7 @@ def webhook():
         
         # 5. Send to Telegram
         # REPLACE THIS WITH YOUR ACTUAL CHAT ID
-        TELEGRAM_CHAT_ID = "123456789" 
+        TELEGRAM_CHAT_ID = "8336153381" 
         
         message = f"🚨 **{symbol} Alert: {direction}**\n\n{analysis}"
         

@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 # --- CONFIGURATION ---
 TELEGRAM_BOT_TOKEN = os.environ.get('8868202823:AAGossWmb0df2fPY96ayuFLP5O5cQQYyHJY')
-print(f"DEBUG: Token found is: '{8868202823:AAGossWmb0df2fPY96ayuFLP5O5cQQYyHJY}'")
+print(f"DEBUG: Token found is: '{TELEGRAM_BOT_TOKEN}'")
 OPENAI_API_KEY = os.environ.get('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')
 
 # --- TELEGRAM BOT FUNCTIONS ---

@@ -88,7 +88,7 @@ def webhook():
         
         # Send to Telegram
         # NOTE: You need to store the Chat ID somewhere or use a specific one
-        TELEGRAM_CHAT_ID = os.environ.get('8336153381', '123456789')
+        TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID', '8336153381')
         
         message = f"🚨 **{symbol} Alert: {direction}**\n\n{analysis}"
         

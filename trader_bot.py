@@ -126,32 +126,47 @@ app = Flask(__name__)
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
-    data = request.json
-    symbol = data.get('symbol', 'BTC')
-    direction = data.get('direction', 'WAIT')
-    price = data.get('price', '0')
-    
-    # 1. Get Full Data for this Symbol
-    full_data = get_market_data(symbol)
-    
-    if "error" in full_data:
-        return jsonify({"status": "error", "message": full_data['error']})
-    
-    # 2. Ask AI for Analysis
-    analysis = ask_ai(full_data)
-    
-    # 3. Send to Telegram (You need a Chat ID to send messages proactively)
-    # Replace '123456789' with your actual Telegram Chat ID
-    TELEGRAM_CHAT_ID = "8336153381"
-    
-    message = f"🚨 **{symbol} Alert: {direction}**\n\n{analysis}"
-    
-    bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
     try:
-        bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=message, parse_mode="Markdown")
-        return jsonify({"status": "sent"})
+        # 1. Handle GET request (from the new Pine Script)
+        if request.method == 'GET':
+            symbol = request.args.get('symbol', 'BTC')
+            direction = request.args.get('direction', 'WAIT')
+            price = request.args.get('price', '0')
+            time = request.args.get('time', 'Now')
+        
+        # 2. Handle POST request (fallback for old JSON format)
+        else:
+            data = request.json
+            symbol = data.get('symbol', 'BTC')
+            direction = data.get('direction', 'WAIT')
+            price = data.get('price', '0')
+            time = data.get('time', 'Now')
+
+        # 3. Get Full Market Data
+        full_data = get_market_data(symbol)
+        
+        if "error" in full_data:
+            return jsonify({"status": "error", "message": full_data['error']})
+        
+        # 4. Ask AI for Analysis
+        analysis = ask_ai(full_data)
+        
+        # 5. Send to Telegram
+        # REPLACE THIS WITH YOUR ACTUAL CHAT ID
+        TELEGRAM_CHAT_ID = "123456789" 
+        
+        message = f"🚨 **{symbol} Alert: {direction}**\n\n{analysis}"
+        
+        bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
+        try:
+            bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=message, parse_mode="Markdown")
+            return jsonify({"status": "sent"})
+        except Exception as e:
+            return jsonify({"status": "error", "message": str(e)})
+
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})
+       
 
 def run_telegram_bot():
     application = ApplicationBuilder().token(TELEGRAM_BOT_TOKEN).build()

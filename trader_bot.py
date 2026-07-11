@@ -179,10 +179,12 @@ def run_flask_app():
     app.run(port=5000, debug=False)
 
 if __name__ == '__main__':
-    # Run Telegram Bot in a Thread
-    telegram_thread = threading.Thread(target=run_telegram_bot)
-    telegram_thread.daemon = True
-    telegram_thread.start()
+    import os
+    # Render sends a PORT environment variable (usually 5000 or 1000)
+    port = int(os.environ.get('PORT', 5000))
+    
+    # Run the Flask app
+    app.run(host='0.0.0.0', port=port)
     
     # Run Flask Webhook in Main Thread
     run_flask_app()

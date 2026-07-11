@@ -1,6 +1,7 @@
 import os
 from flask import Flask, request, jsonify
-from telegram import Update, Bot, ChatAction
+from telegram import Update, Bot
+from telegram.constants import ChatAction
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 import yfinance as yf
 import openai
